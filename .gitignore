@@ -1,0 +1,40 @@
+# ===== DATA — DO NOT UPLOAD =====
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# ===== MODELS — DO NOT UPLOAD =====
+artifacts/*
+!artifacts/.gitkeep
+
+# ===== DATA FILES (anywhere) =====
+*.csv
+*.xlsx
+*.xls
+*.parquet
+*.pkl
+*.pickle
+
+# ===== PYTHON =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.ipynb_checkpoints/
+
+# ===== IDE =====
+.vscode/
+.idea/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== SECRETS =====
+.env
+*.key
+secrets.json
