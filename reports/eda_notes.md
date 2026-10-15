@@ -98,3 +98,26 @@
 5. **FamilyMemberID = person ID** → build family features via `Ариза рақами`
 6. **Dates need parsing** — currently strings
 7. **No duplicates** — data is clean at row level
+
+## 9. PinFL Uniqueness Check
+
+**Purpose:** Verify each person appears once. Repeated PinFL affects train/test split (data leakage).
+
+**Method:** Count rows, count unique PinFL (`nunique` + `value_counts`), find repeated values.
+
+**Finding:** `nunique()` returned 215,216, but `value_counts()` revealed repeated values (e.g. `43007786120035` × 3). Likely caused by `float64` precision loss on 14-digit integers.
+
+**Next:** Check dtype, cast to `int64` if needed.
+
+## 10. Repeated PinFL Analysis
+
+**Finding:** 804 PinFL values repeat (1,609 rows, 0.75%). Inspection shows these are NOT duplicates — the same person appears in different families with different `Ариза рақами`, `LocalityName`, `IsMainApplicant`, and `AdditionDate`.
+
+**Example:** Person `43007786120035` appears 3 times:
+- Family `29586334`, `IsMainApplicant=1`, added 2026-01-18
+- Family `30272010`, `IsMainApplicant=0`, added 2026-03-23
+- Family `30735873`, `IsMainApplicant=0`, added 2026-04-08
+
+**Decision:** Keep all rows. Use `GroupShuffleSplit` by `PinFL` to prevent data leakage.
+
+**Implication:** Same person must not appear in both train and test sets.
